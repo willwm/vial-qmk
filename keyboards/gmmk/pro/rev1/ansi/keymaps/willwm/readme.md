@@ -3,20 +3,11 @@
 
 # willwm GMMK Pro Layout 
 
-Based on [gmmk/pro/keymaps/default](../default/keymap.c), with [VIA support](./rules.mk)
+Based on [gmmk/pro/rev1/ansi/keymaps/default](../default/keymap.c), with [Vial support](./rules.mk)
 
-Layer 0
+Includes per-layer lighting, based on example from [RGB Matrix → Indicator Examples](https://docs.qmk.fm/#/feature_rgb_matrix?id=indicator-examples)
 
-* Delete between F12 and rotary encoder (replaces PrtSc)
-* Home below rotary encoder (replaces Del)
-* MO(1) in default location and Caps Lock location
+See also:
 
-Layer 1
-
-* Tab -> Caps Lock
-* Del -> Insert
-* Home -> PrtSc
-* Left Arrow -> Home
-* Right Arrow -> End
-* Up Arrow -> PgUp
-* Down Arrow -> PgDn
+- [How I flash my Vial Keyboards - QMK Layer Indicator - YouTube](https://www.youtube.com/watch?v=sGB0vLcEVCY)
+- [Vial (get.vial.today)](https://get.vial.today/)
