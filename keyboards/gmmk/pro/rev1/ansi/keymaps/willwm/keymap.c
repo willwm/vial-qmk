@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 
-#define FN_CAPS LT(3,KC_PSCR)
+#define FN_CAPS LT(3, KC_PSCR)
 
 // Encoders - Encoder Map ================================================= //
 // https://docs.qmk.fm/#/feature_encoders?id=encoder-map                    //
@@ -34,7 +34,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //      ESC      F1       F2       F3       F4       F5       F6       F7       F8       F9       F10      F11      F12	     Del           Rotary(Mute)
     //      ~        1        2        3        4        5        6        7        8        9        0         -       (=)	     BackSpc           Home
     //      Tab      Q        W        E        R        T        Y        U        I        O        P        [        ]        \                 PgUp
-    // LT(3,...)     A        S        D        F        G        H        J        K        L        ;        "                 Enter             PgDn
+    //      FN_CAPS  A        S        D        F        G        H        J        K        L        ;        "                 Enter             PgDn
     //      Sh_L              Z        X        C        V        B        N        M        ,        .        ?                 Sh_R     Up       End
     //      Ct_L     Alt_L    Win_L                               SPACE                               Win_R    Alt_R    Ct_R     Left     Down     Right
     [0] = LAYOUT(
@@ -65,17 +65,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [3] = LAYOUT(
-        TO(0),   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_INS,            _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,           _______,
+        QK_BOOT, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_INS,            _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,           KC_PSCR,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, QK_BOOT,           _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          KC_LOCK,           _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,           _______,
         _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          KC_CAPS, _______,  _______,
-        _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______,  _______
+        _______, _______, _______,                            KC_PSCR,                            _______, _______, _______, _______, _______,  _______
     ),
 };
 // clang-format on
 
+// Caps Word - Representing Caps Word state =============================== //
+// https://docs.qmk.fm/#/feature_caps_word?id=representing-caps-word-state  //
 
+void caps_word_set_user(bool active) {
+    if (active) {
+        // Do something when Caps Word activates.
+    } else {
+        // Do something when Caps Word deactivates.
+    }
+}
 
 // RGB Matrix - Callbacks ================================================= //
 // https://docs.qmk.fm/#/feature_rgb_matrix?id=callbacks                    //
@@ -92,14 +101,23 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 }
 
 void rgb_matrix_indicators_user(void) {
+    // Show Caps Word state
+    if (is_caps_word_on()) {
+        rgb_matrix_set_color_all(RGB_RED);
+    }
+
+    // Show active layear
     uint8_t layer = get_highest_layer(layer_state|default_layer_state);
 
     switch(layer) {
+        case 4:
+            rgb_matrix_set_color_all(RGB_WHITE);
+            break;
         case 3:
             rgb_matrix_set_color_all(RGB_CYAN);
             break;
         case 2:
-            rgb_matrix_set_color_all(RGB_MAGENTA);
+            rgb_matrix_set_color_all(RGB_ORANGE);
             break;
         case 1:
             rgb_matrix_set_color_all(RGB_CHARTREUSE);
