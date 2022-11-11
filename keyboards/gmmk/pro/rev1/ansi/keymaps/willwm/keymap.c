@@ -16,31 +16,60 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 
+// Unicode - Unicode Map ================================================= //
+// https://docs.qmk.fm/#/feature_unicode?id=unicode-map                    //
+
+enum unicode_names {
+    ALL,
+    EXST,
+    ELEM,
+    INF,
+    EMPT
+};
+
+const uint32_t PROGMEM unicode_map[] = {
+    [ALL]   = 0x2200,  // ∀
+    [EXST]  = 0x2203,  // ∃
+    [ELEM]  = 0x2208,  // ∈
+    [INF]   = 0x221E,  // ∞
+    [EMPT]  = 0x2205,  // ∅
+};
+
+// Encoders - Encoder Map ================================================= //
+// https://docs.qmk.fm/#/feature_encoders?id=encoder-map                    //
+
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
+    [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [1] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
+    [2] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
+    [3] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
+};
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     //      ESC      F1       F2       F3       F4       F5       F6       F7       F8       F9       F10      F11      F12	     Del           Rotary(Mute)
     //      ~        1        2        3        4        5        6        7        8        9        0         -       (=)	     BackSpc           Home
     //      Tab      Q        W        E        R        T        Y        U        I        O        P        [        ]        \                 PgUp
-    //      Caps     A        S        D        F        G        H        J        K        L        ;        "                 Enter             PgDn
+    // LT(3,...)     A        S        D        F        G        H        J        K        L        ;        "                 Enter             PgDn
     //      Sh_L              Z        X        C        V        B        N        M        ,        .        ?                 Sh_R     Up       End
-    //      Ct_L     Win_L    Alt_L                               SPACE                               Alt_R    FN       Ct_R     Left     Down     Right
+    //      Ct_L     Alt_L    Win_L                               SPACE                               Win_R    Alt_R    Ct_R     Left     Down     Right
     [0] = LAYOUT(
         KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,           KC_MUTE,
         KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          KC_HOME,
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,          KC_PGUP,
-        MO(1),   KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,           KC_PGDN,
+ LT(3,KC_PSCR),  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,           KC_PGDN,
         KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT, KC_UP,   KC_END,
         KC_LCTL, KC_LALT, KC_LGUI,                            KC_SPC,                             KC_RGUI, KC_RALT, KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
     [1] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_INS,            _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,           KC_PSCR,
-        KC_CAPS, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, QK_BOOT,           _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,           _______,
-        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, KC_PGUP,  _______,
-        _______, _______, _______,                            _______,                            _______, _______, _______, KC_HOME, KC_PGDN,  KC_END
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,          _______,
+        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, _______,
+        _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______, _______
     ),
 
     [2] = LAYOUT(
@@ -53,37 +82,78 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [3] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,          _______,
-        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, _______,
-        _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______, _______
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_INS,            _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,           RGB_SPI,
+        _______, _______, _______, X(EXST), _______, _______, _______, _______, X(INF),  X(EMPT), _______, _______, _______, QK_BOOT,           RGB_VAI,
+        _______, X(ALL),  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,           RGB_VAD,
+        _______,          _______, _______, X(ELEM), _______, _______, _______, _______, RGB_RMOD, RGB_MOD, RGB_TOG,         KC_CAPS, RGB_SAI,  RGB_SPD,
+        _______, _______, _______,                            _______,                            _______, _______, _______, RGB_HUD, RGB_SAD,  RGB_HUI
     ),
 };
 // clang-format on
 
-const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
-    [0] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
-    [1] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
-    [2] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
-    [3] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
-};
 
-void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    for (uint8_t i = led_min; i <= led_max; i++) {
-        switch(get_highest_layer(layer_state|default_layer_state)) {
-            case 3:
-                rgb_matrix_set_color_all(255,0,0);
-                break;
-            case 2:
-                rgb_matrix_set_color_all(0,255,0);
-                break;
-            case 1:
-                rgb_matrix_set_color_all(0,0,255);
-                break;
-            default:
-                break;
+
+
+// RGB Matrix - Callbacks ================================================= //
+// https://docs.qmk.fm/#/feature_rgb_matrix?id=callbacks                    //
+
+void caps_lock_indicator(uint8_t led_min, uint8_t led_max)  {
+    // Show Caps Lock state:
+    if (host_keyboard_led_state().caps_lock) {
+        for (uint8_t i = led_min; i <= led_max; i++) {
+            if (g_led_config.flags[i] & LED_FLAG_KEYLIGHT) {
+                rgb_matrix_set_color(i, RGB_RED);
+            }
         }
     }
+}
+
+void set_layer_color(uint8_t layer, uint8_t index) {
+    switch(layer) {
+        case 3:
+            rgb_matrix_set_color(index, RGB_CYAN);
+            break;
+        case 2:
+            rgb_matrix_set_color(index, RGB_MAGENTA);
+            break;
+        case 1:
+            rgb_matrix_set_color(index, RGB_CHARTREUSE);
+            break;
+        default:
+            break;
+    }      
+}
+
+
+void layer_indicator_all_keys(uint8_t led_min, uint8_t led_max) {
+    // Layer indicator on all keys:
+    for (uint8_t i = led_min; i <= led_max; i++) {
+        uint8_t layer = get_highest_layer(layer_state|default_layer_state);
+        set_layer_color(layer, i);
+    }
+}
+
+void layer_indicator_only_configured(uint8_t led_min, uint8_t led_max) {
+    // Layer indicator only on keys with configured keycodes:
+    if (get_highest_layer(layer_state) > 0) {
+        uint8_t layer = get_highest_layer(layer_state);
+
+        for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+                uint8_t index = g_led_config.matrix_co[row][col];
+
+                if (index >= led_min && index <= led_max && index != NO_LED &&
+                keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
+                    set_layer_color(layer, index);                
+                }
+            }
+        }
+    }
+}
+
+// https://docs.qmk.fm/#/feature_rgb_matrix?id=indicator-examples
+void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    caps_lock_indicator(led_min, led_max);
+    layer_indicator_all_keys(led_min, led_max);
 }
