@@ -78,17 +78,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // RGB Matrix - Callbacks ================================================= //
 // https://docs.qmk.fm/#/feature_rgb_matrix?id=callbacks                    //
 
-void caps_lock_indicator(uint8_t led_min, uint8_t led_max)  {
-    // Show Caps Lock state:
-    if (host_keyboard_led_state().caps_lock) {
-        for (uint8_t i = led_min; i <= led_max; i++) {
-            if (g_led_config.flags[i] & LED_FLAG_KEYLIGHT) {
-                rgb_matrix_set_color(i, RGB_RED);
-            }
-        }
-    }
-}
-
 void set_layer_color(uint8_t layer, uint8_t index) {
     switch(layer) {
         case 3:
@@ -108,16 +97,18 @@ void set_layer_color(uint8_t layer, uint8_t index) {
 
 void layer_indicator_all_keys(uint8_t led_min, uint8_t led_max) {
     // Layer indicator on all keys:
-    for (uint8_t i = led_min; i <= led_max; i++) {
-        uint8_t layer = get_highest_layer(layer_state|default_layer_state);
+    uint8_t layer = get_highest_layer(layer_state|default_layer_state);
+
+    for (uint8_t i = led_min; i <= led_max; i++) {        
         set_layer_color(layer, i);
     }
 }
 
 void layer_indicator_only_configured(uint8_t led_min, uint8_t led_max) {
+    uint8_t layer = get_highest_layer(layer_state);
+
     // Layer indicator only on keys with configured keycodes:
-    if (get_highest_layer(layer_state) > 0) {
-        uint8_t layer = get_highest_layer(layer_state);
+    if (layer > 0) {
 
         for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
             for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
@@ -125,8 +116,19 @@ void layer_indicator_only_configured(uint8_t led_min, uint8_t led_max) {
 
                 if (index >= led_min && index <= led_max && index != NO_LED &&
                 keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
-                    set_layer_color(layer, index);                
+                    set_layer_color(layer, index);
                 }
+            }
+        }
+    }
+}
+
+void caps_lock_indicator(uint8_t led_min, uint8_t led_max)  {
+    // Show Caps Lock state:
+    if (host_keyboard_led_state().caps_lock) {
+        for (uint8_t i = led_min; i <= led_max; i++) {
+            if (g_led_config.flags[i] & LED_FLAG_UNDERGLOW) {
+                rgb_matrix_set_color(i, RGB_RED);
             }
         }
     }
