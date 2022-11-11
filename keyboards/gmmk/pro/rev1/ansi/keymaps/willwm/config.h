@@ -23,6 +23,10 @@
 #define DRIVER_2_LED_TOTAL 32
 #define DRIVER_LED_TOTAL (DRIVER_1_LED_TOTAL + DRIVER_2_LED_TOTAL)
 
+#define TAPPING_TOGGLE 2
+#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
+#define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
+
 //enable RGB Matrix Effects for Vial
 #define RGB_MATRIX_KEYPRESSES           // reacts to keypresses
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS  // enable framebuffer effects
