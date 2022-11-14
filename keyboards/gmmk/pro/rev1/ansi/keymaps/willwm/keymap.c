@@ -23,10 +23,7 @@ enum layers {
     FRNT,
 };
 
-#define FN_BASE TO(BASE)
-#define FN_FUNC OSL(FUNC)
-#define FN_TOP  OSL(TOP)
-#define FN_FRNT OSL(FRNT)
+#define FN_FUNC LT(FUNC, KC_PSCR)
 
 
 // Encoders - Encoder Map ================================================= //
@@ -56,9 +53,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [FUNC] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,           _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, QK_RBT,            KC_PSCR,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, QK_BOOT,           FN_TOP,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,           FN_FRNT,
-        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______,  FN_BASE,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, QK_BOOT,           OSL(TOP),
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,           OSL(FRNT),
+        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______,  TO(BASE),
         _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______,  _______
     ),
 
@@ -100,26 +97,27 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
 }
 
-void rgb_matrix_indicators_user(void) {
-    // Show Caps Word state
+void rgb_matrix_indicators_user(void) {        
     if (is_caps_word_on()) {
-        rgb_matrix_set_color_all(RGB_PURPLE);
+        // Show Caps Word state
+        rgb_matrix_set_color_all(RGB_MAGENTA);
+    } else {
+        // Show active layear
+        uint8_t layer = get_highest_layer(layer_state|default_layer_state);
+
+        switch(layer) {
+            case FUNC:
+                rgb_matrix_set_color_all(RGB_CYAN);
+                break;
+            case TOP:
+                rgb_matrix_set_color_all(RGB_ORANGE);
+                break;   
+            case FRNT:
+                rgb_matrix_set_color_all(RGB_CHARTREUSE);
+                break;                     
+            default:
+                break;
+        }
     }
 
-    // Show active layear
-    uint8_t layer = get_highest_layer(layer_state|default_layer_state);
-
-    switch(layer) {
-        case FRNT:
-            rgb_matrix_set_color_all(RGB_CYAN);
-            break;
-        case TOP:
-            rgb_matrix_set_color_all(RGB_ORANGE);
-            break;
-        case FUNC:
-            rgb_matrix_set_color_all(RGB_CHARTREUSE);
-            break;
-        default:
-            break;
-    }      
 }
